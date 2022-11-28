@@ -16,10 +16,9 @@ import com.game.tictactoe.view.PlayerView;
 public class PlayerServicesTest {
 
 	@Autowired
-	PlayerRepository playerRepository;
+	private PlayerRepository playerRepository;
 
-	@Autowired
-	PlayerConverter playerConverter;
+	private PlayerConverter playerConverter = new PlayerConverter();
 
 	@Autowired
 	private TestEntityManager entityManager;
@@ -30,8 +29,8 @@ public class PlayerServicesTest {
 		PlayerService playerService = new PlayerService(playerConverter, playerRepository);
 
 		Player player = entityManager.persist(new Player("player"));
-
 		PlayerView p = playerService.save(player);
 		Assertions.assertThat(p).isNotEqualTo(null);
 	}
+
 }
