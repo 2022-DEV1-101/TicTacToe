@@ -10,13 +10,22 @@ import com.game.tictactoe.view.PlayerView;
 @Service
 public class PlayerService {
 
-	public PlayerService(PlayerConverter playerConverter, PlayerRepository playerRepository) {
-		// TODO Auto-generated constructor stub
+	
+	private final PlayerRepository playerRepo;
+	private final PlayerConverter playerConverter;
+
+	public PlayerService(PlayerConverter playerConverter, PlayerRepository playerRepo) {
+		this.playerConverter = playerConverter;
+		this.playerRepo = playerRepo;
 	}
 
 	public PlayerView save(Player player) {
-		// TODO Auto-generated method stub
-		return null;
+		Player p = this.playerRepo.save(player);
+		return convertToView(p);
+	}
+	
+	public PlayerView convertToView(Player player) {
+		return this.playerConverter.convert(player);
 	}
 
 }
