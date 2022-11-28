@@ -29,7 +29,7 @@ public class TicTacToeControllerTest {
 
 	@MockBean
 	private PlayerService playerService;
-	
+
 	@MockBean
 	private GameService gameService;
 
@@ -58,25 +58,4 @@ public class TicTacToeControllerTest {
 				.content(objectMapper.writeValueAsString(req))).andExpect(status().isCreated());
 	}
 
-	@Test
-	@DisplayName("new Game api player 1 doesn't exist  test")
-	public void newGamePlayer1Null() throws JsonProcessingException, Exception {
-		NewGameRequest req = new NewGameRequest();
-		req.setPlayer1(10000L);
-		req.setPlayer2(1L);
-		mockMvc.perform(post("/api/game/new").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(req)))
-				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
-	}
-
-	@Test
-	@DisplayName("new Game api player 2 doesn't exist  test")
-	public void newGamePlayer2Null() throws JsonProcessingException, Exception {
-		NewGameRequest req = new NewGameRequest();
-		req.setPlayer2(10000L);
-		req.setPlayer1(1L);
-		mockMvc.perform(post("/api/game/new").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(req)))
-				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
-	}
 }
