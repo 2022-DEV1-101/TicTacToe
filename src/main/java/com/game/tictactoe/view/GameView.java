@@ -5,9 +5,9 @@ import com.game.tictactoe.entity.Player;
 public class GameView {
 	private Long id;
 
-	private Player player1;
+	private PlayerView player1;
 
-	private Player player2;
+	private PlayerView player2;
 
 	private String[][] board;
 
@@ -17,7 +17,7 @@ public class GameView {
 
 	private Integer chancesLeft;
 
-	public GameView(Long id, Player player1, Player player2, String[][] board, Long turn, boolean gameOver,
+	public GameView(Long id, PlayerView player1, PlayerView player2, String[][] board, Long turn, boolean gameOver,
 			Integer chancesLeft) {
 		super();
 		this.id = id;
@@ -41,19 +41,19 @@ public class GameView {
 		this.id = id;
 	}
 
-	public Player getPlayer1() {
+	public PlayerView getPlayer1() {
 		return player1;
 	}
 
-	public void setPlayer1(Player player1) {
+	public void setPlayer1(PlayerView player1) {
 		this.player1 = player1;
 	}
 
-	public Player getPlayer2() {
+	public PlayerView getPlayer2() {
 		return player2;
 	}
 
-	public void setPlayer2(Player player2) {
+	public void setPlayer2(PlayerView player2) {
 		this.player2 = player2;
 	}
 

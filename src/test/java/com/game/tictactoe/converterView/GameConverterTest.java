@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import com.game.tictactoe.entity.Game;
 import com.game.tictactoe.entity.Player;
 import com.game.tictactoe.view.GameView;
+import com.game.tictactoe.view.PlayerView;
 
 @DataJpaTest
 public class GameConverterTest {
@@ -31,12 +32,15 @@ public class GameConverterTest {
 		g.setGameOver(false);
 
 		// Expected result
-
+		PlayerView p1View = new PlayerView();
+		PlayerView p2View = new PlayerView();
+		p1View.setUserName("p1");
+		p2View.setUserName("p2");
 		GameView gExpected = new GameView();
 		gExpected.setBoard(board);
 		gExpected.setGameOver(false);
-		gExpected.setPlayer1(p1);
-		gExpected.setPlayer2(p2);
+		gExpected.setPlayer1(p1View);
+		gExpected.setPlayer2(p2View);
 		gExpected.setTurn(1L);
 
 		GameView result = this.gameConverter.convert(g);

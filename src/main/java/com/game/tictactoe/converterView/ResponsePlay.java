@@ -1,13 +1,20 @@
 package com.game.tictactoe.converterView;
 
-public class ResponsePlay {
+import java.io.Serializable;
 
-	private Object o;
+import com.game.tictactoe.view.GameView;
+
+public class ResponsePlay  {
+
+	/**
+	 * 
+	 */
+	private GameView gameView;
 	private String message;
 
-	public ResponsePlay(Object o, String message) {
+	public ResponsePlay(GameView gameView, String message) {
 		super();
-		this.o = o;
+		this.gameView = gameView;
 		this.message = message;
 	}
 
@@ -16,12 +23,12 @@ public class ResponsePlay {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Object getO() {
-		return o;
+	public GameView getO() {
+		return gameView;
 	}
 
-	public void setO(Object o) {
-		this.o = o;
+	public void setO(GameView gameView) {
+		this.gameView = gameView;
 	}
 
 	public String getMessage() {
