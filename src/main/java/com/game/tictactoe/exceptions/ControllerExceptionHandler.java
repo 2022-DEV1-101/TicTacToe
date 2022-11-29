@@ -10,6 +10,13 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+	@ExceptionHandler(RulesNotRespectedException.class)
+	public ResponseEntity<ErrorMessage> rulesNotRespectedException(ResourceNotFoundException ex, WebRequest request) {
+		ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST.value(), new Date(), ex.getMessage(),
+				request.getDescription(false));
+
+		return new ResponseEntity<ErrorMessage>(message, HttpStatus.BAD_REQUEST);
+	}
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ErrorMessage> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {

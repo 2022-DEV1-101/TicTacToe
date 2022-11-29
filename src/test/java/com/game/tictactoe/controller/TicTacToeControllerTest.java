@@ -1,7 +1,7 @@
 package com.game.tictactoe.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game.tictactoe.exceptions.ResourceNotFoundException;
 import com.game.tictactoe.requests.NewGameRequest;
 import com.game.tictactoe.requests.NewPlayerRequest;
+import com.game.tictactoe.requests.PlayRequest;
 import com.game.tictactoe.services.GameService;
 import com.game.tictactoe.services.PlayerService;
 
@@ -56,6 +56,16 @@ public class TicTacToeControllerTest {
 
 		mockMvc.perform(post("/api/game/new").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(req))).andExpect(status().isCreated());
+	}
+
+	@Test
+	@DisplayName("play exception controller test exception")
+	public void playException() throws JsonProcessingException, Exception {
+		PlayRequest req = new PlayRequest();
+
+		mockMvc.perform(put("/api/player/play/{playerId}", 1111L).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req))).andExpect(status().isInternalServerError());
+
 	}
 
 }

@@ -11,13 +11,13 @@ public class GameView {
 
 	private String[][] board;
 
-	private Integer turn;
+	private Long turn;
 
 	private boolean gameOver;
 
 	private Integer chancesLeft;
 
-	public GameView(Long id, Player player1, Player player2, String[][] board, Integer turn, boolean gameOver,
+	public GameView(Long id, Player player1, Player player2, String[][] board, Long turn, boolean gameOver,
 			Integer chancesLeft) {
 		super();
 		this.id = id;
@@ -65,11 +65,11 @@ public class GameView {
 		this.board = board;
 	}
 
-	public Integer getTurn() {
+	public Long getTurn() {
 		return turn;
 	}
 
-	public void setTurn(Integer turn) {
+	public void setTurn(Long turn) {
 		this.turn = turn;
 	}
 

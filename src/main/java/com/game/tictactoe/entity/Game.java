@@ -33,7 +33,7 @@ public class Game {
 	private String[][] board;
 
 	@Column(name = "turn")
-	private Integer turn;
+	private Long turn;
 
 	@Column(name = "gameOver")
 	private boolean gameOver;
@@ -41,7 +41,7 @@ public class Game {
 	@Column(name = "chancesLeft")
 	private Integer chancesLeft;
 
-	public Game(Player player1, Player player2, String[][] board, Integer turn, boolean gameOver, Integer chancesLeft) {
+	public Game(Player player1, Player player2, String[][] board, Long turn, boolean gameOver, Integer chancesLeft) {
 		super();
 		this.player1 = player1;
 		this.player2 = player2;
@@ -87,12 +87,12 @@ public class Game {
 		this.board = board;
 	}
 
-	public Integer getTurn() {
+	public Long getTurn() {
 		return turn;
 	}
 
-	public void setTurn(Integer turn) {
-		this.turn = turn;
+	public void setTurn(Long long1) {
+		this.turn = long1;
 	}
 
 	public boolean isGameOver() {
