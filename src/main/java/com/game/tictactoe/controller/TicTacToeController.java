@@ -2,15 +2,22 @@ package com.game.tictactoe.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.game.tictactoe.converterView.ResponsePlay;
+import com.game.tictactoe.entity.Game;
 import com.game.tictactoe.entity.Player;
+import com.game.tictactoe.exceptions.ResourceNotFoundException;
+import com.game.tictactoe.exceptions.RulesNotRespectedException;
 import com.game.tictactoe.requests.NewGameRequest;
 import com.game.tictactoe.requests.NewPlayerRequest;
+import com.game.tictactoe.requests.PlayRequest;
 import com.game.tictactoe.services.GameService;
 import com.game.tictactoe.services.PlayerService;
 import com.game.tictactoe.view.GameView;
@@ -42,4 +49,29 @@ public class TicTacToeController {
 		Player p2 = this.playerService.getById(gameReq.getPlayer2());
 		return new ResponseEntity<>(this.gameService.InitializeGame(gameReq, p1, p2), HttpStatus.CREATED);
 	}
+
+	@PutMapping(value = "/player/play/{playerId}")
+	@ResponseBody
+	public ResponseEntity<ResponsePlay> play(@RequestBody PlayRequest playReq, @PathVariable Long playerId) {
+		ResponsePlay response = new ResponsePlay();
+		
+		Player p = this.playerService.getById(playerId);
+		Game game = this.gameService.findById(playReq.getGameId());
+		String[][] board = game.getBoard();
+		
+		this.gameService.checkFirstPlay(game, p);
+			
+		this.gameService.checkGameOver(game);
+
+		Long pNextTurn = this.gameService.getNextPlayerId(game, playerId);
+
+		if (game.getTurn().equals(playerId)) {
+			this.gameService.playStep(playReq, response, p, game, board, pNextTurn);
+		} else {
+			throw new RulesNotRespectedException("Please wait your turn");
+		}
+
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+
 }
