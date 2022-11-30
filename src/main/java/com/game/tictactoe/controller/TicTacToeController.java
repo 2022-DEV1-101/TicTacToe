@@ -54,7 +54,7 @@ public class TicTacToeController {
 	@ResponseBody
 	public ResponseEntity<ResponsePlay> play(@RequestBody PlayRequest playReq, @PathVariable Long playerId) {
 		ResponsePlay response = new ResponsePlay();
-		
+		try {
 		Player p = this.playerService.getById(playerId);
 		Game game = this.gameService.findById(playReq.getGameId());
 		String[][] board = game.getBoard();
@@ -69,6 +69,17 @@ public class TicTacToeController {
 			this.gameService.playStep(playReq, response, p, game, board, pNextTurn);
 		} else {
 			throw new RulesNotRespectedException("Please wait your turn");
+		}
+		}
+		catch(RulesNotRespectedException e)
+		{
+			response.setMessage(e.getMessage());
+			return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+		}
+		catch(ResourceNotFoundException e)
+		{
+			response.setMessage(e.getMessage());
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
