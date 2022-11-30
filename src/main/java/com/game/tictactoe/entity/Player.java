@@ -24,11 +24,16 @@ public class Player {
 	@Column(name = "symbole")
 	private String symbole;
 
-	public Player(@NonNull String userName, String symbole) {
+	
+	
+
+	public Player(Long id, @NonNull String userName, String symbole) {
 		super();
+		this.id = id;
 		this.userName = userName;
 		this.symbole = symbole;
 	}
+
 
 	public Player(@NonNull String userName) {
 		super();

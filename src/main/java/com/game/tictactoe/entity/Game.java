@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -19,14 +20,12 @@ public class Game {
 	@Column(name = "game_id")
 	private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
-	@JoinColumn(name = "player_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "player1_id", nullable = false)
 	private Player player1;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
-	@JoinColumn(name = "player_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "player2_id", nullable = false)
 	private Player player2;
 
 	@Column(name = "board")
@@ -41,15 +40,7 @@ public class Game {
 	@Column(name = "chancesLeft")
 	private Integer chancesLeft;
 
-	public Game(Player player1, Player player2, String[][] board, Long turn, boolean gameOver, Integer chancesLeft) {
-		super();
-		this.player1 = player1;
-		this.player2 = player2;
-		this.board = board;
-		this.turn = turn;
-		this.gameOver = gameOver;
-		this.chancesLeft = chancesLeft;
-	}
+	
 
 	public Game() {
 		super();
