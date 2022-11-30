@@ -8,6 +8,7 @@ class TictactoeApplicationTests {
 
 	@Test
 	void contextLoads() {
+		TictactoeApplication.main(new String[] {});
 	}
 
 }
