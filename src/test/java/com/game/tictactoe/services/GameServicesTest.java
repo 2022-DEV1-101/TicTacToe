@@ -1,19 +1,25 @@
 package com.game.tictactoe.services;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import com.game.tictactoe.converterView.GameConverter;
+import com.game.tictactoe.converterView.ResponsePlay;
 import com.game.tictactoe.entity.Game;
 import com.game.tictactoe.entity.Player;
+import com.game.tictactoe.exceptions.ResourceNotFoundException;
 import com.game.tictactoe.exceptions.RulesNotRespectedException;
 import com.game.tictactoe.repositories.GameRepository;
 import com.game.tictactoe.repositories.PlayerRepository;
@@ -99,11 +105,104 @@ public class GameServicesTest {
 	}
 
 	@Test
+	@DisplayName("checkFirstStep p1 service Exception chance left < 9 test")
+	public void checkFirstStepCaseChancesLessThenNineP1() {
+		Game g = new Game();
+		g.setChancesLeft(8);
+		Player p1 = new Player();
+		p1.setId(1L);
+		p1.setSymbole("x");
+		Player p2 = new Player();
+		p2.setId(2L);
+		p2.setSymbole("o");
+		g.setPlayer1(p1);
+		g.setPlayer2(p2);
+		g.setTurn(1L);
+
+		assertDoesNotThrow(() -> {
+			this.gameService.checkFirstPlay(g, p1);
+		});
+	}
+	
+	@Test
+	@DisplayName("checkFirstStep p2 service Exception chance left < 9 test")
+	public void checkFirstStepCaseChancesLessThenNineP2() {
+		Game g = new Game();
+		g.setChancesLeft(8);
+		Player p1 = new Player();
+		p1.setId(1L);
+		p1.setSymbole("x");
+		Player p2 = new Player();
+		p2.setId(2L);
+		p2.setSymbole("o");
+		g.setPlayer1(p1);
+		g.setPlayer2(p2);
+		g.setTurn(1L);
+
+		assertDoesNotThrow(() -> {
+			this.gameService.checkFirstPlay(g, p2);
+		});
+	}
+	
+	
+	@Test
+	@DisplayName("checkFirstStep Okservice test")
+	public void checkFirstStepOk() {
+		Game g = new Game();
+		g.setChancesLeft(9);
+		Player p1 = new Player();
+		p1.setId(1L);
+		p1.setSymbole("x");
+		Player p2 = new Player();
+		p2.setId(2L);
+		p2.setSymbole("o");
+		g.setPlayer1(p1);
+		g.setPlayer2(p2);
+		g.setTurn(1L);
+
+		assertDoesNotThrow(() -> {
+			this.gameService.checkFirstPlay(g, p1);
+		});
+	}
+
+	@Test
+	@DisplayName("findById service exception test")
+	public void findByIdException() {
+		assertThrows(ResourceNotFoundException.class, () -> {
+			this.gameService.findById(9999L);
+		});
+	}
+
+	@Test
 	@DisplayName("checkGameOver service test")
 	public void checkGameOver() {
 		Game g = new Game();
 		g.setGameOver(true);
 		assertThrows(RulesNotRespectedException.class, () -> {
+			this.gameService.checkGameOver(g);
+		});
+
+	}
+
+	@Test
+	@DisplayName("check left chance  test")
+	public void checkLeftChance() {
+		Game g = new Game();
+		g.setGameOver(false);
+		g.setChancesLeft(0);
+		assertThrows(RulesNotRespectedException.class, () -> {
+			this.gameService.checkGameOver(g);
+		});
+
+	}
+
+	@Test
+	@DisplayName("check left chance  test")
+	public void NoGameOver() {
+		Game g = new Game();
+		g.setGameOver(false);
+		g.setChancesLeft(1);
+		assertDoesNotThrow(() -> {
 			this.gameService.checkGameOver(g);
 		});
 
@@ -156,10 +255,37 @@ public class GameServicesTest {
 	}
 
 	@Test
+	@DisplayName("check winner column 1 service test")
+	public void winnerCol1() {
+		String[][] board = { { "o", "x", "" }, { "o", "x", "" }, { "o", "x", "" } };
+		String symbole = "x";
+		boolean winner = this.gameService.winner(board, symbole);
+
+		Assertions.assertThat(winner).isEqualTo(true);
+	}
+
+	@Test
 	@DisplayName("check winner line 0 service test")
 	public void winnerLine0() {
-		String[][] board = { { "x", "x", "x" }, { "x", "o", "" }, { "x", "", "" } };
-		System.out.println("------->size:" + board.length);
+		String[][] board = { { "x", "x", "x" }, { "o", "o", "" }, { "", "", "" } };
+		String symbole = "x";
+		boolean winner = this.gameService.winner(board, symbole);
+		Assertions.assertThat(winner).isEqualTo(true);
+	}
+
+	@Test
+	@DisplayName("check winner line 1 service test")
+	public void winnerLine1() {
+		String[][] board = { { "x", "o", "x" }, { "x", "x", "x" }, { "o", "", "" } };
+		String symbole = "x";
+		boolean winner = this.gameService.winner(board, symbole);
+		Assertions.assertThat(winner).isEqualTo(true);
+	}
+
+	@Test
+	@DisplayName("check winner line 2 service test")
+	public void winnerLine2() {
+		String[][] board = { { "", "", "" }, { "", "o", "o" }, { "x", "x", "x" } };
 		String symbole = "x";
 		boolean winner = this.gameService.winner(board, symbole);
 		Assertions.assertThat(winner).isEqualTo(true);
@@ -173,7 +299,6 @@ public class GameServicesTest {
 		boolean winner = this.gameService.winner(board, symbole);
 
 		Assertions.assertThat(winner).isEqualTo(true);
-
 	}
 
 	@Test
@@ -185,4 +310,104 @@ public class GameServicesTest {
 
 		Assertions.assertThat(winner).isEqualTo(true);
 	}
+
+	@Test
+	@DisplayName("play Step service test: Position is unavailable")
+	public void playStep_ExceptionPosition() {
+
+		PlayRequest playReq = new PlayRequest();
+		playReq.setI(0);
+		playReq.setJ(1);
+
+		ResponsePlay response = new ResponsePlay();
+		Player p = new Player();
+		Game game = new Game();
+		String[][] board = { { "", "o", "x" }, { "o", "x", "" }, { "x", "", "" } };
+		Long pNextTurn = 1L;
+
+		Exception exception = assertThrows(RulesNotRespectedException.class, () -> {
+			this.gameService.playStep(playReq, response, p, game, board, pNextTurn);
+		});
+
+		String expectedMessage = "Position is unavailable !";
+		String actualMessage = exception.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+
+	}
+
+	@Test
+	@DisplayName("play Step service test: Ok test")
+	public void playStep_Position() {
+
+		PlayRequest playReq = new PlayRequest();
+		playReq.setI(0);
+		playReq.setJ(0);
+
+		ResponsePlay response = new ResponsePlay();
+		Player p = new Player();
+		p.setSymbole("x");
+		p.setUserName("p");
+		Game game = new Game();
+		game.setChancesLeft(9);
+		String[][] board = { { "", "", "" }, { "", "", "" }, { "", "", "" } };
+		Long pNextTurn = 1L;
+
+		this.gameService.playStep(playReq, response, p, game, board, pNextTurn);
+
+	}
+
+	@Test
+	@DisplayName("play Step service test: winner test")
+	public void playStep_winner() {
+
+		PlayRequest playReq = new PlayRequest();
+		playReq.setI(0);
+		playReq.setJ(0);
+
+		ResponsePlay response = new ResponsePlay();
+		Player p = new Player();
+		p.setSymbole("x");
+		p.setUserName("p");
+		Game game = new Game();
+		game.setChancesLeft(9);
+		String[][] board = { { "", "x", "x" }, { "o", "o", "" }, { "", "", "" } };
+		Long pNextTurn = 1L;
+
+		this.gameService.playStep(playReq, response, p, game, board, pNextTurn);
+
+		String expectedMessage = "p is the winner ";
+		String actualMessage = response.getMessage();
+
+		assertTrue(actualMessage.contains(expectedMessage));
+		Assertions.assertThat(game.isGameOver()).isEqualTo(true);
+	}
+
+	@Test
+	@DisplayName("play Step service test: chance left test")
+	public void playStep_chanceLeft() {
+
+		PlayRequest playReq = new PlayRequest();
+		playReq.setI(0);
+		playReq.setJ(0);
+
+		ResponsePlay response = new ResponsePlay();
+		Player p = new Player();
+		p.setSymbole("x");
+		p.setUserName("p");
+		Game game = new Game();
+		game.setChancesLeft(0);
+		String[][] board = { { "", "o", "x" }, { "o", "o", "x" }, { "x", "x", "o" } };
+		Long pNextTurn = 1L;
+		game.setChancesLeft(1);
+
+		this.gameService.playStep(playReq, response, p, game, board, pNextTurn);
+
+		String expectedMessage = "Game is a draw";
+		String actualMessage = response.getMessage();
+		System.out.println("------>" + actualMessage);
+		assertTrue(actualMessage.contains(expectedMessage));
+
+	}
+
 }

@@ -1,9 +1,8 @@
 package com.game.tictactoe.view;
 
-import com.game.tictactoe.entity.Player;
-
 public class GameView {
-	private Long id;
+	@SuppressWarnings("unused")
+	private Long idGame;
 
 	private PlayerView player1;
 
@@ -17,28 +16,14 @@ public class GameView {
 
 	private Integer chancesLeft;
 
-	public GameView(Long id, PlayerView player1, PlayerView player2, String[][] board, Long turn, boolean gameOver,
-			Integer chancesLeft) {
-		super();
-		this.id = id;
-		this.player1 = player1;
-		this.player2 = player2;
-		this.board = board;
-		this.turn = turn;
-		this.gameOver = gameOver;
-		this.chancesLeft = chancesLeft;
-	}
 
 	public GameView() {
 		super();
 	}
 
-	public Long getId() {
-		return id;
-	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.idGame = id;
 	}
 
 	public PlayerView getPlayer1() {
@@ -81,9 +66,6 @@ public class GameView {
 		this.gameOver = gameOver;
 	}
 
-	public Integer getChancesLeft() {
-		return chancesLeft;
-	}
 
 	public void setChancesLeft(Integer chancesLeft) {
 		this.chancesLeft = chancesLeft;

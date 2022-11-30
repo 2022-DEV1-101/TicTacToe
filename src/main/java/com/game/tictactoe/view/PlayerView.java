@@ -1,7 +1,7 @@
 package com.game.tictactoe.view;
 
 public class PlayerView {
-	private Long id;
+	private Long idPlayer;
 	
 	private String userName;
 	
@@ -13,19 +13,13 @@ public class PlayerView {
 		super();
 	}
 
-	public PlayerView(Long id, String userName, String symbole) {
-		super();
-		this.id = id;
-		this.userName = userName;
-		this.symbole = symbole;
-	}
 
 	public Long getId() {
-		return id;
+		return idPlayer;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.idPlayer = id;
 	}
 
 	public String getUserName() {
