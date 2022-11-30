@@ -34,7 +34,7 @@ public class GameService {
 		p2.setSymbole("o");
 		game.setPlayer1(p1);
 		game.setPlayer2(p2);
-		Game gToConv = this.gameRepo.save(game);
+		Game gToConv = this.gameRepo.saveAndFlush(game);
 		GameView gameView = convertToView(gToConv);
 		return gameView;
 	}
@@ -45,7 +45,7 @@ public class GameService {
 	}
 
 	public GameView save(Game game) {
-		Game g = this.gameRepo.save(game);
+		Game g = this.gameRepo.saveAndFlush(game);
 		return convertToView(g);
 	}
 
@@ -54,7 +54,7 @@ public class GameService {
 	}
 
 	public Long getNextPlayerId(Game g, Long id) {
-		if (g.getPlayer1().getId() == id) {
+		if (g.getPlayer1().getId().equals(id)) {
 			return g.getPlayer2().getId();
 		} else {
 			return g.getPlayer1().getId();
@@ -141,10 +141,12 @@ public class GameService {
 		}
 
 		if (winner(game.getBoard(), p.getSymbole())) {
+			game.setGameOver(true);
 			response.setMessage(p.getUserName() + " is the winner ");
 		}
 
 		if (game.getChancesLeft() == 0) {
+			game.setGameOver(true);
 			response.setMessage("Game is a draw");
 		}
 

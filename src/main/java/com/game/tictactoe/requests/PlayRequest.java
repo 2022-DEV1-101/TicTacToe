@@ -6,12 +6,7 @@ public class PlayRequest {
 	private Integer i;
 	private Integer j;
 
-	public PlayRequest(Long gameId, Integer i, Integer j) {
-		super();
-		this.gameId = gameId;
-		this.i = i;
-		this.j = j;
-	}
+	
 
 	public PlayRequest() {
 		super();

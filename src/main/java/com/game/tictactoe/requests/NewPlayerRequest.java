@@ -6,11 +6,7 @@ public class NewPlayerRequest {
 
 	private String symbole;
 
-	public NewPlayerRequest(Integer id, String userName, String symbole) {
-		super();
-		this.userName = userName;
-		this.symbole = symbole;
-	}
+	
 
 	public NewPlayerRequest() {
 		super();

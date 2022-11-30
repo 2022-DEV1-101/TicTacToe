@@ -12,12 +12,6 @@ public class ResponsePlay  {
 	private GameView gameView;
 	private String message;
 
-	public ResponsePlay(GameView gameView, String message) {
-		super();
-		this.gameView = gameView;
-		this.message = message;
-	}
-
 	public ResponsePlay() {
 		super();
 		// TODO Auto-generated constructor stub

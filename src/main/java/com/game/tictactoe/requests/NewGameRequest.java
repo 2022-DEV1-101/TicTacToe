@@ -14,16 +14,6 @@ public class NewGameRequest {
 
 	private Integer chancesLeft;
 
-	public NewGameRequest(Long player1, Long player2, String[][] board, Integer turn, boolean gameOver,
-			Integer chancesLeft) {
-		super();
-		this.player1 = player1;
-		this.player2 = player2;
-		this.board = board;
-		this.turn = turn;
-		this.gameOver = gameOver;
-		this.chancesLeft = chancesLeft;
-	}
 
 	public NewGameRequest() {
 		super();
