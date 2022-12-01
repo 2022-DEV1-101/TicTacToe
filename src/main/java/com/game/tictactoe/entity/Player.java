@@ -8,6 +8,10 @@ import javax.persistence.Table;
 
 import lombok.NonNull;
 
+/**
+ * @author boura
+ * Player entity to be used with jpa
+ */
 @Entity
 @Table(name = "Player")
 public class Player {
@@ -23,9 +27,8 @@ public class Player {
 
 	@Column(name = "symbole")
 	private String symbole;
+	
 
-	
-	
 
 	public Player(Long id, @NonNull String userName, String symbole) {
 		super();
@@ -33,6 +36,7 @@ public class Player {
 		this.userName = userName;
 		this.symbole = symbole;
 	}
+
 
 
 	public Player(@NonNull String userName) {

@@ -9,20 +9,34 @@ import com.game.tictactoe.entity.Player;
 import com.game.tictactoe.exceptions.ResourceNotFoundException;
 import com.game.tictactoe.exceptions.RulesNotRespectedException;
 import com.game.tictactoe.repositories.GameRepository;
+import com.game.tictactoe.repositories.PlayerRepository;
 import com.game.tictactoe.requests.NewGameRequest;
 import com.game.tictactoe.requests.PlayRequest;
 import com.game.tictactoe.view.GameView;
 
+/**
+ * @author boura will contains all the services needed for the game
+ */
 @Service
 public class GameService {
 	private final GameRepository gameRepo;
 	private final GameConverter gameConverter;
+	private final PlayerRepository playerRepo;
 
-	public GameService(GameRepository gameRepo, GameConverter gameConverter) {
+	public GameService(GameRepository gameRepo, GameConverter gameConverter, PlayerRepository playerRepo) {
 		this.gameConverter = gameConverter;
 		this.gameRepo = gameRepo;
+		this.playerRepo = playerRepo;
 	}
 
+	/**
+	 * method to initialize the game
+	 * 
+	 * @param gameReq
+	 * @param p1
+	 * @param p2
+	 * @return GameView
+	 */
 	public GameView InitializeGame(NewGameRequest gameReq, Player p1, Player p2) {
 		Game game = new Game();
 		String[][] board = { { "", "", "" }, { "", "", "" }, { "", "", "" } };
@@ -30,53 +44,112 @@ public class GameService {
 		game.setGameOver(false);
 		game.setChancesLeft(9);
 		game.setTurn(p1.getId());
+		game.setPlayer1(p1.getId());
+		game.setPlayer2(p2.getId());
+		Game gToConv = this.gameRepo.saveAndFlush(game);
 		p1.setSymbole("x");
 		p2.setSymbole("o");
-		game.setPlayer1(p1);
-		game.setPlayer2(p2);
-		Game gToConv = this.gameRepo.saveAndFlush(game);
-		GameView gameView = convertToView(gToConv);
+		this.playerRepo.save(p1);
+		this.playerRepo.save(p2);
+		GameView gameView = convertToView(gToConv, p1, p2);
 		return gameView;
 	}
 
+	/**
+	 * search game by id if not exist through an exception
+	 * 
+	 * @param id
+	 * @return Game
+	 */
 	public Game findById(Long id) {
 		return this.gameRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Not found game with id = " + id));
 	}
 
+	/**
+	 * save/update a game
+	 * 
+	 * @param game
+	 * @return GameView
+	 */
 	public GameView save(Game game) {
 		Game g = this.gameRepo.saveAndFlush(game);
-		return convertToView(g);
+		Player p1 = this.playerRepo.getOne(game.getPlayer1());
+		Player p2 = this.playerRepo.getOne(game.getPlayer2());
+		return convertToView(g, p1, p2);
 	}
 
-	public GameView convertToView(Game game) {
-		return this.gameConverter.convert(game);
+	/**
+	 * convert a game to gameView
+	 * 
+	 * @param game
+	 * @param p1
+	 * @param p2
+	 * @return GameView
+	 */
+	public GameView convertToView(Game game, Player p1, Player p2) {
+		return this.gameConverter.convert(game, p1, p2);
 	}
 
+	/**
+	 * managing the turn between the two player
+	 * 
+	 * @param g
+	 * @param id
+	 * @return
+	 */
 	public Long getNextPlayerId(Game g, Long id) {
-		if (g.getPlayer1().getId().equals(id)) {
-			return g.getPlayer2().getId();
+		if (g.getPlayer1().equals(id)) {
+			return g.getPlayer2();
 		} else {
-			return g.getPlayer1().getId();
+			return g.getPlayer1();
 		}
 	}
 
+	/**
+	 * to check if the first play have 'x' as symbole
+	 * 
+	 * @param g
+	 * @param p
+	 */
 	public void checkFirstPlay(Game g, Player p) {
 		if (g.getChancesLeft() == 9 && p.getSymbole().equals("o"))
 			throw new RulesNotRespectedException("Player with symbole 'x' must start first");
 
 	}
 
+	/**
+	 * to check if the game is over or not
+	 * 
+	 * @param game
+	 */
 	public void checkGameOver(Game game) {
 		if (game.isGameOver() || game.getChancesLeft() == 0)
 			throw new RulesNotRespectedException("Game finished already !");
 	}
 
+	/**
+	 * check availabilty of a case in the board
+	 * 
+	 * @param board
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkAvailability(String[][] board, int x, int y) {
 		return board[x][y].equals("");
 
 	}
 
+	/**
+	 * to put the played action and make change on the game
+	 * 
+	 * @param board
+	 * @param pNextTurn
+	 * @param playReq
+	 * @param g
+	 * @param p
+	 */
 	public void play(String[][] board, Long pNextTurn, PlayRequest playReq, Game g, Player p) {
 		board[playReq.getI()][playReq.getJ()] = p.getSymbole();
 		g.setBoard(board);
@@ -85,6 +158,14 @@ public class GameService {
 
 	}
 
+	/**
+	 * check the winner , by fetching all the possible cases, example : If a player
+	 * with x symbole have three x’s in a row return true
+	 * 
+	 * @param board
+	 * @param symbole
+	 * @return
+	 */
 	public boolean winner(String[][] board, String symbole) {
 		int count = 0;
 		for (int i = 0; i < board.length; i++) {
@@ -132,6 +213,17 @@ public class GameService {
 		return false;
 	}
 
+	/**
+	 * this method will contain the whole logic of the a player to play on his turn
+	 * result will be saved under response
+	 * 
+	 * @param playReq
+	 * @param response
+	 * @param p
+	 * @param game
+	 * @param board
+	 * @param pNextTurn
+	 */
 	public void playStep(PlayRequest playReq, ResponsePlay response, Player p, Game game, String[][] board,
 			Long pNextTurn) {
 		if (!checkAvailability(board, playReq.getI(), playReq.getJ())) {

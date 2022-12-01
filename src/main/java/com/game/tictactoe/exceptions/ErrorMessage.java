@@ -2,6 +2,10 @@ package com.game.tictactoe.exceptions;
 
 import java.util.Date;
 
+/**
+ * @author boura
+ *	represent the entity to return for after having an exception
+ */
 public class ErrorMessage {
 	private int statusCode;
 	private Date timestamp;

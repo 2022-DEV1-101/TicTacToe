@@ -1,5 +1,9 @@
 package com.game.tictactoe.requests;
 
+/**
+ * @author boura
+ * object to be received when a player play his game
+ */
 public class PlayRequest {
 
 	private Long gameId;

@@ -1,5 +1,9 @@
 package com.game.tictactoe.requests;
 
+/**
+ * @author boura
+ * object to be received on the end point when create new player 
+ */
 public class NewPlayerRequest {
 
 	private String userName;

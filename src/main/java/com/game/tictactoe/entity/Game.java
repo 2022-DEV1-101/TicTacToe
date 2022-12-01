@@ -2,15 +2,14 @@ package com.game.tictactoe.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * @author boura
+ * Game entity to be used with jpa
+ */
 @Entity
 @Table(name = "Game")
 public class Game {
@@ -19,14 +18,13 @@ public class Game {
 	@GeneratedValue
 	@Column(name = "game_id")
 	private Long id;
+	
+	@Column(name = "player1_id")
+	private Long player1;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	 @JoinColumn(name = "player1_id", nullable = false)
-	private Player player1;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	 @JoinColumn(name = "player2_id", nullable = false)
-	private Player player2;
+	
+	@Column(name = "player2_id")
+	private Long player2;
 
 	@Column(name = "board")
 	private String[][] board;
@@ -54,19 +52,19 @@ public class Game {
 		this.id = id;
 	}
 
-	public Player getPlayer1() {
+	public Long getPlayer1() {
 		return player1;
 	}
 
-	public void setPlayer1(Player player1) {
+	public void setPlayer1(Long player1) {
 		this.player1 = player1;
 	}
 
-	public Player getPlayer2() {
+	public Long getPlayer2() {
 		return player2;
 	}
 
-	public void setPlayer2(Player player2) {
+	public void setPlayer2(Long player2) {
 		this.player2 = player2;
 	}
 

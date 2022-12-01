@@ -1,18 +1,18 @@
 package com.game.tictactoe.view;
 
+/**
+ * @author boura View to be returned from Player entity
+ */
 public class PlayerView {
 	private Long idPlayer;
-	
+
 	private String userName;
-	
+
 	private String symbole;
-	
-	
 
 	public PlayerView() {
 		super();
 	}
-
 
 	public Long getId() {
 		return idPlayer;
@@ -37,6 +37,5 @@ public class PlayerView {
 	public void setSymbole(String symbole) {
 		this.symbole = symbole;
 	}
-	
-	
+
 }

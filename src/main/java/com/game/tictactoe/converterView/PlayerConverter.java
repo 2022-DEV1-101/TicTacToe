@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 import com.game.tictactoe.entity.Player;
 import com.game.tictactoe.view.PlayerView;
 
+/**
+ * @author boura Method to convert a Player object to PlayerView object for best
+ *         practice
+ */
 @Component
 public class PlayerConverter implements Converter<Player, PlayerView> {
 

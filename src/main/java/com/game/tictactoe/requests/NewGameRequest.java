@@ -1,5 +1,9 @@
 package com.game.tictactoe.requests;
 
+/**
+ * @author boura
+ *	Object to be received on the end point of create new game
+ */
 public class NewGameRequest {
 
 	private Long player1;

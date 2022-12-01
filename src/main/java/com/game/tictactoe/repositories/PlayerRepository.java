@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.game.tictactoe.entity.Player;
 
+/**
+ * @author boura
+ *	PlayerRepository for db interactions
+ */
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 

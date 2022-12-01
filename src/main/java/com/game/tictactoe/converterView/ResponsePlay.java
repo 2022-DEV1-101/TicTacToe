@@ -1,20 +1,19 @@
 package com.game.tictactoe.converterView;
 
-import java.io.Serializable;
-
 import com.game.tictactoe.view.GameView;
 
-public class ResponsePlay  {
+/**
+ * @author boura This class will represent the response of the end point
+ *         api/player/play/ gameView : contains the object to show message: if
+ *         we have message to display as game over, or wait your turn
+ */
+public class ResponsePlay {
 
-	/**
-	 * 
-	 */
 	private GameView gameView;
 	private String message;
 
 	public ResponsePlay() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public GameView getO() {

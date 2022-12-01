@@ -1,5 +1,9 @@
 package com.game.tictactoe.view;
 
+/**
+ * @author boura
+ * View to be returned from Game entity
+ */
 public class GameView {
 	@SuppressWarnings("unused")
 	private Long idGame;
@@ -13,14 +17,13 @@ public class GameView {
 	private Long turn;
 
 	private boolean gameOver;
-
+	
+	@SuppressWarnings("unused")
 	private Integer chancesLeft;
-
 
 	public GameView() {
 		super();
 	}
-
 
 	public void setId(Long id) {
 		this.idGame = id;
@@ -66,12 +69,8 @@ public class GameView {
 		this.gameOver = gameOver;
 	}
 
-
 	public void setChancesLeft(Integer chancesLeft) {
 		this.chancesLeft = chancesLeft;
 	}
-	
-	
-	
-	
+
 }
