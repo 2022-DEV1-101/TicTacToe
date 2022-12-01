@@ -1,5 +1,7 @@
 package com.game.tictactoe.converterView;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,8 +27,8 @@ public class GameConverterTest {
 
 		p1.setUserName("p1");
 		p2.setUserName("p2");
-		g.setPlayer1(p1);
-		g.setPlayer2(p2);
+		g.setPlayer1(1L);
+		g.setPlayer2(2L);
 		g.setBoard(board);
 		g.setTurn(1L);
 		g.setGameOver(false);
@@ -43,10 +45,13 @@ public class GameConverterTest {
 		gExpected.setPlayer2(p2View);
 		gExpected.setTurn(1L);
 
-		GameView result = this.gameConverter.convert(g);
+		GameView result = this.gameConverter.convert(g,p1,p2);
 		// assertions
+		assertFalse(result.isGameOver());
+		assertFalse(gExpected.isGameOver());
 		Assertions.assertThat(result.getBoard().equals(gExpected.getBoard()));
-		Assertions.assertThat(result.isGameOver() == gExpected.isGameOver());
+		Assertions.assertThat(result.isGameOver()).isEqualTo(gExpected.isGameOver());
+		
 		Assertions.assertThat(result.getPlayer1().equals(gExpected.getPlayer1()));
 		Assertions.assertThat(result.getPlayer2().equals(gExpected.getPlayer2()));
 		Assertions.assertThat(result.getTurn().equals(gExpected.getTurn()));

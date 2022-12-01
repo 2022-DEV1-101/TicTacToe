@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.tictactoe.entity.Game;
 import com.game.tictactoe.entity.Player;
+import com.game.tictactoe.exceptions.ResourceNotFoundException;
 import com.game.tictactoe.repositories.GameRepository;
 import com.game.tictactoe.repositories.PlayerRepository;
 import com.game.tictactoe.requests.NewGameRequest;
@@ -77,10 +78,27 @@ public class TicTacToeControllerTest {
 	}
 
 	@Test
-	@DisplayName("play exception controller test exception")
-	public void playException() throws JsonProcessingException, Exception {
+	@DisplayName("play controller test ResourceNotFoundException")
+	public void play_ResourceNotFoundException() throws JsonProcessingException, Exception {
 		PlayRequest req = new PlayRequest();
-		req.setGameId(1L);
+		req.setGameId(1111L);
+		Mockito.when(playerService.getById(1111L)).thenThrow( new ResourceNotFoundException("Not found player with id = 1111"));
+
+		mockMvc.perform(put("/api/player/play/{playerId}", 1111L).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(req)))
+				.andExpect(status().isBadRequest())
+		.andExpect(content().string("{\"message\":\"Not found player with id = 1111\",\"o\":null}"));
+		
+
+	}
+	
+
+	@Test
+	@DisplayName("play exception controller test exception InternalServerError")
+	public void playExceptionInternal() throws JsonProcessingException, Exception {
+		PlayRequest req = new PlayRequest();
+		req.setGameId(1111L);
+
 		mockMvc.perform(put("/api/player/play/{playerId}", 1111L).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(req)))
 				.andExpect(status().isInternalServerError());
@@ -95,8 +113,8 @@ public class TicTacToeControllerTest {
 		g.setBoard(board);
 		g.setChancesLeft(9);
 		g.setGameOver(false);
-		g.setPlayer1(new Player(1L, "p", "x"));
-		g.setPlayer2(new Player(2L, "p", "o"));
+		g.setPlayer1(1L);
+		g.setPlayer2(2L);
 		g.setTurn(1L);
 		g.setId(3L);
 
@@ -124,8 +142,8 @@ public class TicTacToeControllerTest {
 		g.setBoard(board);
 		g.setChancesLeft(9);
 		g.setGameOver(false);
-		g.setPlayer1(new Player(1L, "p", "x"));
-		g.setPlayer2(new Player(2L, "p", "o"));
+		g.setPlayer1(1L);
+		g.setPlayer2(2L);
 		g.setTurn(1L);
 		g.setId(3L);
 
@@ -151,8 +169,8 @@ public class TicTacToeControllerTest {
 		g.setBoard(board);
 		g.setChancesLeft(9);
 		g.setGameOver(false);
-		g.setPlayer1(new Player(1L, "p", "x"));
-		g.setPlayer2(new Player(2L, "p", "o"));
+		g.setPlayer1(1L);
+		g.setPlayer2(2L);
 		g.setTurn(1L);
 		g.setId(3L);
 
